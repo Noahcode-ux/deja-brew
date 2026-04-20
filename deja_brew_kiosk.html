@@ -7,637 +7,137 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --orange:   #F97316;
-    --amber:    #FBBF24;
-    --yellow:   #FCD34D;
-    --black:    #111111;
-    --bean:     #6B3A1F;
-    --cream:    #FEF3C7;
-    --beige:    #FDE68A;
-    --white:    #FFFBF0;
-    --gray:     #78350F;
-    --light-bg: #FFF7ED;
+    --orange:#F97316; --amber:#FBBF24; --yellow:#FCD34D;
+    --black:#111111; --bean:#6B3A1F; --cream:#FEF3C7;
+    --white:#FFFBF0; --gray:#78350F; --light-bg:#FFF7ED;
   }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--light-bg);color:var(--black);min-height:100vh;}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--light-bg);
-    color: var(--black);
-    min-height: 100vh;
+  header{
+    background:linear-gradient(135deg,var(--amber) 0%,var(--orange) 100%);
+    border-bottom:4px solid var(--black);
+    padding:18px 20px 14px;text-align:center;position:relative;overflow:hidden;
   }
-
-  /* ─── HEADER ─── */
-  header {
-    background: linear-gradient(135deg, var(--amber) 0%, var(--orange) 100%);
-    border-bottom: 4px solid var(--black);
-    padding: 18px 20px 14px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+  header::before{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(0,0,0,0.04) 18px,rgba(0,0,0,0.04) 36px);
   }
+  .logo-wrap{position:relative;z-index:1;}
+  .logo{font-family:'Black Ops One',cursive;font-size:2.6rem;color:var(--black);letter-spacing:3px;line-height:1;text-shadow:3px 3px 0 rgba(0,0,0,0.15);}
+  .logo-accent{display:inline-block;background:var(--black);color:var(--amber);padding:0 10px;border-radius:4px;margin-left:6px;}
+  .tagline{font-size:.75rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--bean);margin-top:4px;}
 
-  header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 18px,
-      rgba(0,0,0,0.04) 18px,
-      rgba(0,0,0,0.04) 36px
-    );
+  .kiosk{max-width:920px;margin:0 auto;padding:22px 16px 40px;}
+
+  /* AI PANEL */
+  .ai-panel{background:var(--black);border:3px solid var(--black);border-radius:18px;padding:22px;margin-bottom:24px;position:relative;overflow:hidden;}
+  .ai-panel::before{content:'☕';position:absolute;right:-10px;top:-10px;font-size:7rem;opacity:.06;transform:rotate(15deg);}
+  .ai-badge{display:inline-flex;align-items:center;gap:6px;background:var(--orange);color:var(--black);font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:10px;}
+  .ai-dot{width:7px;height:7px;background:var(--black);border-radius:50%;animation:blink 1.5s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+  .ai-heading{font-family:'Black Ops One',cursive;font-size:1.5rem;color:var(--amber);margin-bottom:14px;letter-spacing:1px;}
+  .mood-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+  .mood-btn{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 6px;color:#ccc;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:600;text-align:center;transition:all .18s;}
+  .mood-btn .em{display:block;font-size:1.5rem;margin-bottom:3px;}
+  .mood-btn:hover,.mood-btn.active{background:var(--orange);border-color:var(--orange);color:var(--black);}
+  .ai-go-btn{width:100%;background:linear-gradient(90deg,var(--amber),var(--orange));border:3px solid var(--black);border-radius:12px;padding:13px;font-family:'Black Ops One',cursive;font-size:1rem;letter-spacing:1px;color:var(--black);cursor:pointer;transition:transform .15s,opacity .15s;}
+  .ai-go-btn:hover{transform:translateY(-2px);opacity:.92;}
+  .ai-result{display:none;margin-top:14px;background:rgba(251,191,36,.12);border:2px solid var(--amber);border-radius:12px;padding:14px 16px;animation:popIn .35s ease;}
+  .ai-result.show{display:block;}
+  @keyframes popIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+  .ai-result-label{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:4px;}
+  .ai-drink-name{font-family:'Black Ops One',cursive;font-size:1.3rem;color:var(--amber);margin-bottom:4px;}
+  .ai-reason{font-size:.88rem;color:#ddd;line-height:1.5;}
+  .spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(0,0,0,.3);border-top-color:var(--black);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .sec-title{font-family:'Black Ops One',cursive;font-size:1.1rem;letter-spacing:2px;color:var(--black);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+  .sec-title::after{content:'';flex:1;height:3px;background:linear-gradient(90deg,var(--amber),transparent);border-radius:2px;}
+
+  .cat-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;}
+  .cat-tabs::-webkit-scrollbar{height:3px;}
+  .cat-tabs::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px;}
+  .cat-btn{background:var(--white);border:2px solid var(--black);border-radius:30px;padding:6px 16px;font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;color:var(--black);cursor:pointer;white-space:nowrap;transition:all .18s;}
+  .cat-btn.active,.cat-btn:hover{background:var(--black);color:var(--amber);}
+
+  .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:28px;}
+  @media(min-width:580px){.menu-grid{grid-template-columns:repeat(3,1fr);}}
+  .menu-card{background:var(--white);border:2.5px solid var(--black);border-radius:16px;padding:14px;cursor:pointer;transition:all .18s;position:relative;box-shadow:3px 3px 0 var(--black);}
+  .menu-card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--black);}
+  .menu-card.selected{background:var(--cream);border-color:var(--orange);box-shadow:3px 3px 0 var(--orange);}
+  .drink-em{font-size:2rem;display:block;margin-bottom:6px;}
+  .drink-name{font-family:'Black Ops One',cursive;font-size:.95rem;letter-spacing:.5px;color:var(--black);margin-bottom:3px;}
+  .drink-desc{font-size:.72rem;color:var(--gray);line-height:1.35;margin-bottom:8px;}
+  .drink-price{font-size:.9rem;font-weight:700;color:var(--orange);}
+  .add-badge{position:absolute;top:10px;right:10px;width:24px;height:24px;background:var(--black);color:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;opacity:0;transition:opacity .18s;}
+  .menu-card:hover .add-badge{opacity:1;}
+  .menu-card.selected .add-badge{opacity:1;background:var(--orange);color:white;}
+
+  /* ── CUP SIZE ── */
+  .size-box{
+    background:var(--white);border:3px solid var(--black);border-radius:18px;
+    padding:20px 16px 24px;box-shadow:4px 4px 0 var(--black);margin-bottom:28px;
   }
-
-  .logo-wrap { position: relative; z-index: 1; }
-
-  .logo {
-    font-family: 'Black Ops One', cursive;
-    font-size: 2.6rem;
-    color: var(--black);
-    letter-spacing: 3px;
-    line-height: 1;
-    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  .size-row{
+    display:flex;justify-content:center;align-items:flex-end;
+    gap:18px;flex-wrap:wrap;padding-top:8px;
   }
-
-  .logo-accent {
-    display: inline-block;
-    background: var(--black);
-    color: var(--amber);
-    padding: 0 10px;
-    border-radius: 4px;
-    margin-left: 6px;
+  .size-card{
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    cursor:pointer;
+    padding:10px 12px 12px;
+    border:2.5px solid transparent;
+    border-radius:16px;
+    transition:all .2s;
+    background:transparent;
   }
-
-  .tagline {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--bean);
-    margin-top: 4px;
+  .size-card:hover{ background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.4); transform:translateY(-3px);}
+  .size-card.active{
+    background:var(--cream);
+    border-color:var(--orange);
+    box-shadow:3px 3px 0 var(--orange);
   }
-
-  /* ─── MAIN LAYOUT ─── */
-  .kiosk {
-    max-width: 920px;
-    margin: 0 auto;
-    padding: 22px 16px 40px;
-  }
-
-  /* ─── AI PANEL ─── */
-  .ai-panel {
-    background: var(--black);
-    border: 3px solid var(--black);
-    border-radius: 18px;
-    padding: 22px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ai-panel::before {
-    content: '☕';
-    position: absolute;
-    right: -10px; top: -10px;
-    font-size: 7rem;
-    opacity: 0.06;
-    transform: rotate(15deg);
-  }
-
-  .ai-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--orange);
-    color: var(--black);
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-  }
-
-  .ai-dot {
-    width: 7px; height: 7px;
-    background: var(--black);
-    border-radius: 50%;
-    animation: blink 1.5s infinite;
-  }
-
-  @keyframes blink {
-    0%,100% { opacity:1; } 50% { opacity:0.2; }
-  }
-
-  .ai-heading {
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.5rem;
-    color: var(--amber);
-    margin-bottom: 14px;
-    letter-spacing: 1px;
-  }
-
-  .mood-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-
-  .mood-btn {
-    background: rgba(255,255,255,0.06);
-    border: 2px solid rgba(255,255,255,0.12);
-    border-radius: 12px;
-    padding: 10px 6px;
-    color: #ccc;
-    cursor: pointer;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-align: center;
-    transition: all 0.18s;
-  }
-
-  .mood-btn .em { display:block; font-size:1.5rem; margin-bottom:3px; }
-
-  .mood-btn:hover, .mood-btn.active {
-    background: var(--orange);
-    border-color: var(--orange);
-    color: var(--black);
-  }
-
-  .ai-go-btn {
-    width: 100%;
-    background: linear-gradient(90deg, var(--amber), var(--orange));
-    border: 3px solid var(--black);
-    border-radius: 12px;
-    padding: 13px;
-    font-family: 'Black Ops One', cursive;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    color: var(--black);
-    cursor: pointer;
-    transition: transform 0.15s, opacity 0.15s;
-  }
-
-  .ai-go-btn:hover { transform: translateY(-2px); opacity: 0.92; }
-
-  .ai-result {
-    display: none;
-    margin-top: 14px;
-    background: rgba(251,191,36,0.12);
-    border: 2px solid var(--amber);
-    border-radius: 12px;
-    padding: 14px 16px;
-    animation: popIn 0.35s ease;
-  }
-
-  .ai-result.show { display: block; }
-
-  @keyframes popIn {
-    from { opacity:0; transform: scale(0.95); }
-    to   { opacity:1; transform: scale(1); }
-  }
-
-  .ai-result-label {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--amber);
-    margin-bottom: 4px;
-  }
-
-  .ai-drink-name {
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.3rem;
-    color: var(--amber);
-    margin-bottom: 4px;
-  }
-
-  .ai-reason { font-size: 0.88rem; color: #ddd; line-height: 1.5; }
-
-  .spinner {
-    display: inline-block;
-    width: 15px; height: 15px;
-    border: 2px solid rgba(0,0,0,0.3);
-    border-top-color: var(--black);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ─── SECTION TITLE ─── */
-  .sec-title {
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: var(--black);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .sec-title::after {
-    content:'';
-    flex:1;
-    height: 3px;
-    background: linear-gradient(90deg, var(--amber), transparent);
-    border-radius: 2px;
-  }
-
-  /* ─── CATEGORY TABS ─── */
-  .cat-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-
-  .cat-tabs::-webkit-scrollbar { height: 3px; }
-  .cat-tabs::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
-
-  .cat-btn {
-    background: var(--white);
-    border: 2px solid var(--black);
-    border-radius: 30px;
-    padding: 6px 16px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--black);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.18s;
-  }
-
-  .cat-btn.active, .cat-btn:hover {
-    background: var(--black);
-    color: var(--amber);
-  }
-
-  /* ─── MENU GRID ─── */
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  @media(min-width:580px) { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
-
-  .menu-card {
-    background: var(--white);
-    border: 2.5px solid var(--black);
-    border-radius: 16px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.18s;
-    position: relative;
-    box-shadow: 3px 3px 0 var(--black);
-  }
-
-  .menu-card:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 var(--black);
-  }
-
-  .menu-card.selected {
-    background: var(--cream);
-    border-color: var(--orange);
-    box-shadow: 3px 3px 0 var(--orange);
-  }
-
-  .drink-em { font-size: 2rem; display: block; margin-bottom: 6px; }
-
-  .drink-name {
-    font-family: 'Black Ops One', cursive;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    color: var(--black);
-    margin-bottom: 3px;
-  }
-
-  .drink-desc {
-    font-size: 0.72rem;
-    color: var(--gray);
-    line-height: 1.35;
-    margin-bottom: 8px;
-  }
-
-  .drink-price {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--orange);
-  }
-
-  .add-badge {
-    position: absolute;
-    top: 10px; right: 10px;
-    width: 24px; height: 24px;
-    background: var(--black);
-    color: var(--amber);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.18s;
-  }
-
-  .menu-card:hover .add-badge { opacity: 1; }
-  .menu-card.selected .add-badge { opacity: 1; background: var(--orange); color: white; }
-
-  /* ─── CART ─── */
-  .cart-box {
-    background: var(--white);
-    border: 3px solid var(--black);
-    border-radius: 18px;
-    padding: 18px;
-    box-shadow: 4px 4px 0 var(--black);
-    margin-bottom: 30px;
-  }
-
-  .cart-empty {
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--gray);
-    padding: 12px 0;
-  }
-
-  .cart-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 9px 0;
-    border-bottom: 1px dashed #ddd;
-    animation: popIn 0.25s ease;
-  }
-
-  .cart-item:last-child { border-bottom: none; }
-  .ci-name { font-size: 0.88rem; font-weight: 600; }
-  .ci-price { font-size: 0.85rem; font-weight: 700; color: var(--orange); }
-
-  .ci-remove {
-    background: none;
-    border: none;
-    color: #bbb;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 2px 6px;
-    border-radius: 6px;
-    transition: color 0.15s;
-    margin-left: 8px;
-  }
-
-  .ci-remove:hover { color: #ef4444; }
-
-  .cart-total {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 2px solid var(--black);
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.05rem;
-  }
-
-  .cart-total span { color: var(--orange); }
-
-  .checkout-btn {
-    width: 100%;
-    background: linear-gradient(90deg, var(--amber), var(--orange));
-    border: 3px solid var(--black);
-    border-radius: 14px;
-    padding: 15px;
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.05rem;
-    letter-spacing: 1px;
-    color: var(--black);
-    cursor: pointer;
-    box-shadow: 3px 3px 0 var(--black);
-    margin-top: 14px;
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-
-  .checkout-btn:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0 var(--black);
-  }
-
-  /* ─── MODAL OVERLAY ─── */
-  .modal-bg {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-bg.show { display: flex; }
-
-  .modal {
-    background: var(--white);
-    border: 3px solid var(--black);
-    border-radius: 20px;
-    padding: 26px 24px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 6px 6px 0 var(--black);
-    animation: popIn 0.3s ease;
-  }
-
-  .modal-title {
-    font-family: 'Black Ops One', cursive;
-    font-size: 1.4rem;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-
-  .modal-sub {
-    font-size: 0.82rem;
-    color: var(--gray);
-    margin-bottom: 20px;
-  }
-
-  .order-summary {
-    background: var(--cream);
-    border: 2px solid var(--black);
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 18px;
-    font-size: 0.85rem;
-  }
-
-  .order-sum-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 4px 0;
-    border-bottom: 1px dashed #ccc;
-  }
-
-  .order-sum-row:last-child { border-bottom: none; font-weight: 700; color: var(--orange); }
-
-  /* Payment form */
-  .form-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--gray);
-    margin-bottom: 5px;
-    display: block;
-  }
-
-  .form-input {
-    width: 100%;
-    border: 2px solid var(--black);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
-    background: var(--white);
-    margin-bottom: 12px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
-  .form-input:focus { border-color: var(--orange); }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  .card-icons { display: flex; gap: 6px; margin-bottom: 14px; }
-
-  .card-icon {
-    background: var(--black);
-    color: var(--amber);
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    letter-spacing: 1px;
-  }
-
-  .pay-btn {
-    width: 100%;
-    background: linear-gradient(90deg, var(--amber), var(--orange));
-    border: 3px solid var(--black);
-    border-radius: 12px;
-    padding: 13px;
-    font-family: 'Black Ops One', cursive;
-    font-size: 1rem;
-    color: var(--black);
-    cursor: pointer;
-    box-shadow: 3px 3px 0 var(--black);
-    transition: transform 0.15s, box-shadow 0.15s;
-    letter-spacing: 1px;
-  }
-
-  .pay-btn:hover {
-    transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0 var(--black);
-  }
-
-  .cancel-link {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.82rem;
-    color: var(--gray);
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  .cancel-link:hover { color: var(--black); }
-
-  /* ─── SUCCESS SCREEN ─── */
-  .success-screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, var(--amber), var(--orange));
-    z-index: 300;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 30px;
-  }
-
-  .success-screen.show { display: flex; }
-
-  .success-icon {
-    font-size: 5rem;
-    margin-bottom: 14px;
-    animation: bounce 0.7s ease;
-  }
-
-  @keyframes bounce {
-    0%   { transform: scale(0) rotate(-10deg); }
-    65%  { transform: scale(1.2) rotate(3deg); }
-    100% { transform: scale(1) rotate(0); }
-  }
-
-  .success-title {
-    font-family: 'Black Ops One', cursive;
-    font-size: 2.5rem;
-    color: var(--black);
-    letter-spacing: 2px;
-    margin-bottom: 6px;
-  }
-
-  .order-num-label { font-size: 0.85rem; font-weight: 700; color: var(--bean); margin-bottom: 4px; }
-
-  .order-num {
-    font-family: 'Black Ops One', cursive;
-    font-size: 4rem;
-    color: var(--black);
-    background: var(--white);
-    border: 3px solid var(--black);
-    border-radius: 16px;
-    padding: 8px 28px;
-    margin: 8px 0 20px;
-    box-shadow: 4px 4px 0 var(--bean);
-    letter-spacing: 6px;
-  }
-
-  .success-msg { font-size: 0.95rem; color: var(--bean); margin-bottom: 26px; font-weight: 600; }
-
-  .new-order-btn {
-    background: var(--black);
-    color: var(--amber);
-    border: 3px solid var(--black);
-    border-radius: 12px;
-    padding: 13px 36px;
-    font-family: 'Black Ops One', cursive;
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: 3px 3px 0 var(--bean);
-    letter-spacing: 1px;
-    transition: transform 0.15s;
-  }
-
-  .new-order-btn:hover { transform: translateY(-2px); }
+  .cup-img{ display:flex; align-items:flex-end; justify-content:center; }
+  .cup-img svg{ transition: filter .2s; }
+  .size-card.active .cup-img svg{ filter: drop-shadow(0 2px 6px rgba(249,115,22,0.5)); }
+
+  .s-label{ font-family:'Black Ops One',cursive; font-size:.85rem; letter-spacing:1px; color:var(--gray); }
+  .size-card.active .s-label{ color:var(--orange); }
+  .s-name{ font-size:.72rem; font-weight:700; color:var(--gray); }
+  .s-ml{ font-size:.68rem; color:var(--bean); }
+  .s-extra{ font-size:.7rem; font-weight:700; color:var(--orange); }
+
+  /* CART */
+  .cart-box{background:var(--white);border:3px solid var(--black);border-radius:18px;padding:18px;box-shadow:4px 4px 0 var(--black);margin-bottom:28px;}
+  .cart-empty{text-align:center;font-size:.85rem;color:var(--gray);padding:12px 0;}
+  .cart-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed #ddd;animation:popIn .25s ease;}
+  .cart-item:last-child{border-bottom:none;}
+  .ci-name{font-size:.88rem;font-weight:600;}
+  .ci-price{font-size:.85rem;font-weight:700;color:var(--orange);}
+  .ci-remove{background:none;border:none;color:#bbb;cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:6px;transition:color .15s;margin-left:8px;}
+  .ci-remove:hover{color:#ef4444;}
+  .cart-total{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:2px solid var(--black);font-family:'Black Ops One',cursive;font-size:1.05rem;}
+  .cart-total span{color:var(--orange);}
+  .order-btn{width:100%;background:linear-gradient(90deg,var(--amber),var(--orange));border:3px solid var(--black);border-radius:14px;padding:15px;font-family:'Black Ops One',cursive;font-size:1.05rem;letter-spacing:1px;color:var(--black);cursor:pointer;box-shadow:3px 3px 0 var(--black);margin-top:14px;transition:transform .15s,box-shadow .15s;}
+  .order-btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--black);}
+
+  /* SUCCESS */
+  .success-screen{display:none;position:fixed;inset:0;background:linear-gradient(135deg,var(--amber),var(--orange));z-index:300;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;}
+  .success-screen.show{display:flex;}
+  .success-icon{font-size:5rem;margin-bottom:14px;animation:bounce .7s ease;}
+  @keyframes bounce{0%{transform:scale(0) rotate(-10deg);}65%{transform:scale(1.2) rotate(3deg);}100%{transform:scale(1) rotate(0);}}
+  .success-title{font-family:'Black Ops One',cursive;font-size:2.5rem;color:var(--black);letter-spacing:2px;margin-bottom:6px;}
+  .order-num-label{font-size:.85rem;font-weight:700;color:var(--bean);margin-bottom:4px;}
+  .order-num{font-family:'Black Ops One',cursive;font-size:4rem;color:var(--black);background:var(--white);border:3px solid var(--black);border-radius:16px;padding:8px 28px;margin:8px 0 10px;box-shadow:4px 4px 0 var(--bean);letter-spacing:6px;}
+  .order-size-badge{background:var(--black);color:var(--amber);font-family:'Black Ops One',cursive;font-size:.85rem;letter-spacing:1px;padding:5px 14px;border-radius:20px;margin-bottom:20px;}
+  .success-msg{font-size:.95rem;color:var(--bean);margin-bottom:26px;font-weight:600;}
+  .new-order-btn{background:var(--black);color:var(--amber);border:3px solid var(--black);border-radius:12px;padding:13px 36px;font-family:'Black Ops One',cursive;font-size:1rem;cursor:pointer;box-shadow:3px 3px 0 var(--bean);letter-spacing:1px;transition:transform .15s;}
+  .new-order-btn:hover{transform:translateY(-2px);}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo-wrap">
     <div class="logo">DÉJÀ<span class="logo-accent">BREW</span></div>
@@ -654,9 +154,9 @@
     <div class="mood-grid">
       <button class="mood-btn" onclick="pickMood(this,'tired and desperately need energy')"><span class="em">😴</span>Tired</button>
       <button class="mood-btn" onclick="pickMood(this,'happy and social and celebratory')"><span class="em">😊</span>Happy</button>
-      <button class="mood-btn" onclick="pickMood(this,'stressed and need to calm down and relax')"><span class="em">😤</span>Stressed</button>
+      <button class="mood-btn" onclick="pickMood(this,'stressed and need to calm down')"><span class="em">😤</span>Stressed</button>
       <button class="mood-btn" onclick="pickMood(this,'focused and studying hard')"><span class="em">📚</span>Studying</button>
-      <button class="mood-btn" onclick="pickMood(this,'adventurous and want to try something bold and new')"><span class="em">🌟</span>Bold</button>
+      <button class="mood-btn" onclick="pickMood(this,'adventurous and want something bold and new')"><span class="em">🌟</span>Bold</button>
       <button class="mood-btn" onclick="pickMood(this,'cozy and want something warm and comforting')"><span class="em">🧸</span>Cozy</button>
     </div>
     <button class="ai-go-btn" onclick="getAIRec()">✨ RECOMMEND MY DRINK</button>
@@ -669,7 +169,6 @@
 
   <!-- MENU -->
   <div class="sec-title">OUR MENU</div>
-
   <div class="cat-tabs">
     <button class="cat-btn active" onclick="filterCat('all',this)">All</button>
     <button class="cat-btn" onclick="filterCat('coffee',this)">☕ Coffee</button>
@@ -677,8 +176,93 @@
     <button class="cat-btn" onclick="filterCat('tea',this)">🍵 Tea</button>
     <button class="cat-btn" onclick="filterCat('special',this)">⭐ Specials</button>
   </div>
-
   <div class="menu-grid" id="menuGrid"></div>
+
+  <!-- CUP SIZE -->
+  <div class="sec-title">PICK YOUR CUP SIZE</div>
+  <div class="size-box">
+    <div class="size-row">
+
+      <!-- SMALL -->
+      <div class="size-card" id="sz-S" onclick="pickSize('S')">
+        <div class="cup-img">
+          <svg width="48" height="62" viewBox="0 0 48 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="9" y="2" width="30" height="6" rx="3" fill="#D97706"/>
+            <rect x="13" y="0" width="22" height="4" rx="2" fill="#92400E"/>
+            <path d="M9 8 L7 56 Q7 60 11 60 L37 60 Q41 60 41 56 L39 8Z" fill="#FEF3C7"/>
+            <path d="M8 27 L7.5 42 Q7.5 44 9.5 44 L38.5 44 Q40.5 44 40.5 42 L40 27Z" fill="#92400E"/>
+            <ellipse cx="24" cy="35" rx="4.5" ry="6" fill="#6B3A1F" opacity=".7"/>
+            <line x1="24" y1="29" x2="24" y2="41" stroke="#FEF3C7" stroke-width="1" opacity=".6"/>
+            <path d="M9 8 L7 56 Q7 60 11 60 L37 60 Q41 60 41 56 L39 8Z" fill="none" stroke="#111" stroke-width="2"/>
+            <rect x="9" y="2" width="30" height="6" rx="3" fill="none" stroke="#111" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="s-label">S</div>
+        <div class="s-name">Small</div>
+        <div class="s-ml">250ml</div>
+      </div>
+
+      <!-- MEDIUM -->
+      <div class="size-card active" id="sz-M" onclick="pickSize('M')">
+        <div class="cup-img">
+          <svg width="62" height="80" viewBox="0 0 62 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="11" y="2" width="40" height="8" rx="3.5" fill="#D97706"/>
+            <rect x="16" y="0" width="30" height="5" rx="2.5" fill="#92400E"/>
+            <path d="M11 10 L8 72 Q8 78 14 78 L48 78 Q54 78 54 72 L51 10Z" fill="#FEF3C7"/>
+            <path d="M10 33 L9 52 Q9 55 12 55 L50 55 Q53 55 53 52 L52 33Z" fill="#92400E"/>
+            <ellipse cx="31" cy="44" rx="6" ry="8" fill="#6B3A1F" opacity=".7"/>
+            <line x1="31" y1="36" x2="31" y2="52" stroke="#FEF3C7" stroke-width="1.5" opacity=".6"/>
+            <path d="M11 10 L8 72 Q8 78 14 78 L48 78 Q54 78 54 72 L51 10Z" fill="none" stroke="#111" stroke-width="2"/>
+            <rect x="11" y="2" width="40" height="8" rx="3.5" fill="none" stroke="#111" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="s-label">M</div>
+        <div class="s-name">Medium</div>
+        <div class="s-ml">350ml</div>
+      </div>
+
+      <!-- LARGE -->
+      <div class="size-card" id="sz-L" onclick="pickSize('L')">
+        <div class="cup-img">
+          <svg width="76" height="100" viewBox="0 0 76 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="2" width="52" height="10" rx="4" fill="#D97706"/>
+            <rect x="18" y="0" width="40" height="6" rx="3" fill="#92400E"/>
+            <path d="M12 12 L8 90 Q8 98 16 98 L60 98 Q68 98 68 90 L64 12Z" fill="#FEF3C7"/>
+            <path d="M11 40 L9 63 Q9 67 14 67 L62 67 Q67 67 67 63 L65 40Z" fill="#92400E"/>
+            <ellipse cx="38" cy="54" rx="8" ry="10" fill="#6B3A1F" opacity=".7"/>
+            <line x1="38" y1="44" x2="38" y2="64" stroke="#FEF3C7" stroke-width="1.5" opacity=".6"/>
+            <path d="M12 12 L8 90 Q8 98 16 98 L60 98 Q68 98 68 90 L64 12Z" fill="none" stroke="#111" stroke-width="2"/>
+            <rect x="12" y="2" width="52" height="10" rx="4" fill="none" stroke="#111" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="s-label">L</div>
+        <div class="s-name">Large</div>
+        <div class="s-ml">500ml</div>
+        <div class="s-extra">+R5</div>
+      </div>
+
+      <!-- XL -->
+      <div class="size-card" id="sz-XL" onclick="pickSize('XL')">
+        <div class="cup-img">
+          <svg width="92" height="122" viewBox="0 0 92 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="14" y="2" width="64" height="12" rx="5" fill="#D97706"/>
+            <rect x="22" y="0" width="48" height="7" rx="3.5" fill="#92400E"/>
+            <path d="M14 14 L9 109 Q9 119 19 119 L73 119 Q83 119 83 109 L78 14Z" fill="#FEF3C7"/>
+            <path d="M13 48 L10 76 Q10 81 17 81 L75 81 Q82 81 82 76 L79 48Z" fill="#92400E"/>
+            <ellipse cx="46" cy="65" rx="10" ry="12" fill="#6B3A1F" opacity=".7"/>
+            <line x1="46" y1="53" x2="46" y2="77" stroke="#FEF3C7" stroke-width="2" opacity=".6"/>
+            <path d="M14 14 L9 109 Q9 119 19 119 L73 119 Q83 119 83 109 L78 14Z" fill="none" stroke="#111" stroke-width="2.5"/>
+            <rect x="14" y="2" width="64" height="12" rx="5" fill="none" stroke="#111" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="s-label">XL</div>
+        <div class="s-name">Extra Large</div>
+        <div class="s-ml">700ml</div>
+        <div class="s-extra">+R10</div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- CART -->
   <div class="sec-title">YOUR ORDER</div>
@@ -686,80 +270,47 @@
     <div class="cart-empty" id="cartEmpty">Nothing here yet — pick something above ☝️</div>
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal" style="display:none">Total <span id="totalAmt">R0.00</span></div>
-    <button class="checkout-btn" id="checkoutBtn" style="display:none" onclick="openPayment()">💳 PROCEED TO PAYMENT →</button>
+    <button class="order-btn" id="orderBtn" style="display:none" onclick="placeOrder()">☕ PLACE ORDER →</button>
   </div>
 
 </div>
 
-<!-- ─── PAYMENT MODAL ─── -->
-<div class="modal-bg" id="payModal">
-  <div class="modal">
-    <div class="modal-title">💳 PAYMENT</div>
-    <div class="modal-sub">Review your order and enter card details</div>
-
-    <!-- Order summary -->
-    <div class="order-summary" id="paymentSummary"></div>
-
-    <!-- Card icons -->
-    <div class="card-icons">
-      <div class="card-icon">VISA</div>
-      <div class="card-icon">MC</div>
-      <div class="card-icon">AMEX</div>
-    </div>
-
-    <label class="form-label">Name on Card</label>
-    <input class="form-input" id="cardName" type="text" placeholder="e.g. Noah Sangweni" maxlength="30">
-
-    <label class="form-label">Card Number</label>
-    <input class="form-input" id="cardNumber" type="text" placeholder="1234  5678  9012  3456" maxlength="19" oninput="formatCard(this)">
-
-    <div class="form-row">
-      <div>
-        <label class="form-label">Expiry</label>
-        <input class="form-input" id="cardExp" type="text" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
-      </div>
-      <div>
-        <label class="form-label">CVV</label>
-        <input class="form-input" id="cardCvv" type="text" placeholder="123" maxlength="3">
-      </div>
-    </div>
-
-    <button class="pay-btn" onclick="processPayment()">🔒 PAY <span id="payAmount">R0.00</span></button>
-    <span class="cancel-link" onclick="closePayment()">Cancel & go back</span>
-  </div>
-</div>
-
-<!-- ─── SUCCESS SCREEN ─── -->
+<!-- SUCCESS -->
 <div class="success-screen" id="successScreen">
   <div class="success-icon">☕</div>
   <div class="success-title">ORDER PLACED!</div>
   <div class="order-num-label">YOUR ORDER NUMBER</div>
   <div class="order-num" id="orderNum">#00</div>
-  <div class="success-msg">Payment successful ✅ We'll call your number when it's ready!</div>
+  <div class="order-size-badge" id="orderSizeBadge">MEDIUM · 350ml</div>
+  <div class="success-msg">We'll call your number when it's ready! 🎉</div>
   <button class="new-order-btn" onclick="resetAll()">NEW ORDER</button>
 </div>
 
 <script>
 const MENU = [
-  { id:1,  name:'Espresso',       emoji:'☕', desc:'Rich double shot, bold & smooth',          price:29,  cat:'coffee'  },
-  { id:2,  name:'Cappuccino',     emoji:'🫖', desc:'Espresso with silky steamed foam',          price:39,  cat:'coffee'  },
-  { id:3,  name:'Flat White',     emoji:'☕', desc:'Velvety microfoam, full bodied',            price:42,  cat:'coffee'  },
-  { id:4,  name:'Americano',      emoji:'☕', desc:'Espresso diluted to perfection',            price:32,  cat:'coffee'  },
-  { id:5,  name:'Iced Latte',     emoji:'🥛', desc:'Cold brew with milk over ice',              price:45,  cat:'cold'    },
-  { id:6,  name:'Frappé',         emoji:'🧋', desc:'Blended ice coffee, sweet & creamy',        price:52,  cat:'cold'    },
-  { id:7,  name:'Cold Brew',      emoji:'🧊', desc:'12-hour steeped, smooth & bold',            price:49,  cat:'cold'    },
-  { id:8,  name:'Matcha Latte',   emoji:'🍵', desc:'Earthy Japanese matcha, oat milk',          price:49,  cat:'tea'     },
-  { id:9,  name:'Chai Tea',       emoji:'🫖', desc:'Spiced Indian masala, steamed milk',        price:38,  cat:'tea'     },
-  { id:10, name:'Caramel Cloud',  emoji:'⭐', desc:'Signature cold foam + caramel drizzle',     price:58,  cat:'special' },
-  { id:11, name:'Mocha Bomb',     emoji:'🍫', desc:'Double espresso, dark choc, oat milk',      price:55,  cat:'special' },
-  { id:12, name:'Bean Berry',     emoji:'🫐', desc:'Espresso + blueberry syrup + cream',        price:60,  cat:'special' },
+  {id:1,  name:'Espresso',      emoji:'☕', desc:'Rich double shot, bold & smooth',       price:29, cat:'coffee'},
+  {id:2,  name:'Cappuccino',    emoji:'🫖', desc:'Espresso with silky steamed foam',       price:39, cat:'coffee'},
+  {id:3,  name:'Flat White',    emoji:'☕', desc:'Velvety microfoam, full bodied',         price:42, cat:'coffee'},
+  {id:4,  name:'Americano',     emoji:'☕', desc:'Espresso diluted to perfection',         price:32, cat:'coffee'},
+  {id:5,  name:'Iced Latte',    emoji:'🥛', desc:'Cold brew with milk over ice',           price:45, cat:'cold'},
+  {id:6,  name:'Frappé',        emoji:'🧋', desc:'Blended ice coffee, sweet & creamy',     price:52, cat:'cold'},
+  {id:7,  name:'Cold Brew',     emoji:'🧊', desc:'12-hour steeped, smooth & bold',         price:49, cat:'cold'},
+  {id:8,  name:'Matcha Latte',  emoji:'🍵', desc:'Earthy Japanese matcha, oat milk',       price:49, cat:'tea'},
+  {id:9,  name:'Chai Tea',      emoji:'🫖', desc:'Spiced Indian masala, steamed milk',     price:38, cat:'tea'},
+  {id:10, name:'Caramel Cloud', emoji:'⭐', desc:'Signature cold foam + caramel drizzle',  price:58, cat:'special'},
+  {id:11, name:'Mocha Bomb',    emoji:'🍫', desc:'Double espresso, dark choc, oat milk',   price:55, cat:'special'},
+  {id:12, name:'Bean Berry',    emoji:'🫐', desc:'Espresso + blueberry syrup + cream',     price:60, cat:'special'},
 ];
 
-let cart = {};
-let currentCat = 'all';
-let selectedMood = '';
+const SIZES = {
+  S:  {label:'Small',       ml:'250ml', extra:0},
+  M:  {label:'Medium',      ml:'350ml', extra:0},
+  L:  {label:'Large',       ml:'500ml', extra:5},
+  XL: {label:'Extra Large', ml:'700ml', extra:10},
+};
 
-/* ─── RENDER MENU ─── */
+let cart = {}, currentCat = 'all', selectedMood = '', selectedSize = 'M';
+
 function renderMenu() {
   const items = currentCat === 'all' ? MENU : MENU.filter(d => d.cat === currentCat);
   document.getElementById('menuGrid').innerHTML = items.map(d => `
@@ -769,8 +320,7 @@ function renderMenu() {
       <div class="drink-desc">${d.desc}</div>
       <div class="drink-price">R${d.price}.00</div>
       <div class="add-badge">${cart[d.id] ? '✓' : '+'}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function filterCat(cat, btn) {
@@ -780,185 +330,102 @@ function filterCat(cat, btn) {
   renderMenu();
 }
 
-function addItem(id) {
-  cart[id] = (cart[id] || 0) + 1;
-  renderMenu();
-  updateCart();
-}
+function addItem(id) { cart[id] = (cart[id]||0)+1; renderMenu(); updateCart(); }
+function removeItem(id) { delete cart[id]; renderMenu(); updateCart(); }
 
-function removeItem(id) {
-  delete cart[id];
-  renderMenu();
-  updateCart();
+function cartBase() {
+  return Object.keys(cart).reduce((s,id) => {
+    const d = MENU.find(m => m.id==id); return s + d.price*cart[id];
+  }, 0);
 }
 
 function updateCart() {
   const keys = Object.keys(cart);
-  const empty = document.getElementById('cartEmpty');
+  const emptyEl = document.getElementById('cartEmpty');
   const itemsEl = document.getElementById('cartItems');
   const totalEl = document.getElementById('cartTotal');
-  const checkBtn = document.getElementById('checkoutBtn');
+  const btn     = document.getElementById('orderBtn');
 
   if (!keys.length) {
-    empty.style.display = 'block';
-    itemsEl.innerHTML = '';
-    totalEl.style.display = 'none';
-    checkBtn.style.display = 'none';
-    return;
+    emptyEl.style.display='block'; itemsEl.innerHTML='';
+    totalEl.style.display='none'; btn.style.display='none'; return;
   }
-
-  empty.style.display = 'none';
-  totalEl.style.display = 'flex';
-  checkBtn.style.display = 'block';
-
-  let total = 0;
+  emptyEl.style.display='none'; totalEl.style.display='flex'; btn.style.display='block';
   itemsEl.innerHTML = keys.map(id => {
-    const d = MENU.find(m => m.id == id);
-    const sub = d.price * cart[id];
-    total += sub;
-    return `
-      <div class="cart-item">
-        <span class="ci-name">${d.emoji} ${d.name} ×${cart[id]}</span>
-        <span style="display:flex;align-items:center;gap:4px">
-          <span class="ci-price">R${sub}.00</span>
-          <button class="ci-remove" onclick="removeItem(${id})">✕</button>
-        </span>
-      </div>`;
+    const d = MENU.find(m => m.id==id), sub = d.price*cart[id];
+    return `<div class="cart-item">
+      <span class="ci-name">${d.emoji} ${d.name} ×${cart[id]}</span>
+      <span style="display:flex;align-items:center;gap:4px">
+        <span class="ci-price">R${sub}.00</span>
+        <button class="ci-remove" onclick="removeItem(${id})">✕</button>
+      </span></div>`;
   }).join('');
-
-  document.getElementById('totalAmt').textContent = `R${total}.00`;
+  const sz = SIZES[selectedSize];
+  const total = cartBase() + sz.extra;
+  document.getElementById('totalAmt').textContent =
+    `R${total}.00${sz.extra ? ` (+R${sz.extra} ${sz.label})` : ''}`;
 }
 
-function cartTotal() {
-  return Object.keys(cart).reduce((sum, id) => {
-    const d = MENU.find(m => m.id == id);
-    return sum + d.price * cart[id];
-  }, 0);
+function pickSize(s) {
+  selectedSize = s;
+  document.querySelectorAll('.size-card').forEach(el => el.classList.remove('active'));
+  document.getElementById('sz-'+s).classList.add('active');
+  updateCart();
 }
 
-/* ─── AI RECOMMENDER ─── */
 function pickMood(btn, mood) {
   document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedMood = mood;
+  btn.classList.add('active'); selectedMood = mood;
 }
 
 async function getAIRec() {
   if (!selectedMood) { alert('Pick a mood first!'); return; }
-
   const btn = document.querySelector('.ai-go-btn');
-  btn.innerHTML = '<span class="spinner"></span>Thinking...';
-  btn.disabled = true;
-
+  btn.innerHTML = '<span class="spinner"></span>Thinking...'; btn.disabled = true;
   document.getElementById('aiResult').classList.remove('show');
-
   const menuList = MENU.map(d => `${d.name} (R${d.price}): ${d.desc}`).join(', ');
-
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `You are a friendly AI barista for Déjà Brew café. Based on the customer's mood, recommend exactly ONE drink from the menu. Reply ONLY with valid JSON (no markdown, no extra text): {"drink":"Drink Name","reason":"1-2 warm sentences why this drink matches their mood"}`,
-        messages: [{ role: 'user', content: `Mood: ${selectedMood}. Menu: ${menuList}` }]
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1000,
+        system:`You are a friendly AI barista for Déjà Brew café. Recommend ONE drink from the menu based on the customer's mood. Reply ONLY with valid JSON, no markdown: {"drink":"Drink Name","reason":"1-2 warm sentences"}`,
+        messages:[{role:'user', content:`Mood: ${selectedMood}. Menu: ${menuList}`}]
       })
     });
-
     const data = await res.json();
     const parsed = JSON.parse(data.content[0].text.trim());
-
     document.getElementById('aiDrink').textContent = parsed.drink;
     document.getElementById('aiReason').textContent = parsed.reason;
-
-    const found = MENU.find(d => d.name.toLowerCase() === parsed.drink.toLowerCase());
+    const found = MENU.find(d => d.name.toLowerCase()===parsed.drink.toLowerCase());
     if (found) addItem(found.id);
-
     document.getElementById('aiResult').classList.add('show');
   } catch(e) {
     document.getElementById('aiDrink').textContent = 'Caramel Cloud';
-    document.getElementById('aiReason').textContent = 'Our signature special is always a great pick — rich, smooth, and unforgettable. ☁️';
+    document.getElementById('aiReason').textContent = 'Our signature special is always a great pick — rich, smooth and unforgettable. ☁️';
     document.getElementById('aiResult').classList.add('show');
   }
-
-  btn.innerHTML = '✨ RECOMMEND MY DRINK';
-  btn.disabled = false;
+  btn.innerHTML = '✨ RECOMMEND MY DRINK'; btn.disabled = false;
 }
 
-/* ─── PAYMENT ─── */
-function openPayment() {
-  const keys = Object.keys(cart);
-  if (!keys.length) return;
-
-  let rows = keys.map(id => {
-    const d = MENU.find(m => m.id == id);
-    return `<div class="order-sum-row"><span>${d.emoji} ${d.name} ×${cart[id]}</span><span>R${d.price * cart[id]}.00</span></div>`;
-  }).join('');
-  rows += `<div class="order-sum-row"><span>TOTAL</span><span>R${cartTotal()}.00</span></div>`;
-
-  document.getElementById('paymentSummary').innerHTML = rows;
-  document.getElementById('payAmount').textContent = `R${cartTotal()}.00`;
-  document.getElementById('payModal').classList.add('show');
+function placeOrder() {
+  const num = String(Math.floor(Math.random()*90)+10);
+  document.getElementById('orderNum').textContent = '#'+num;
+  const s = SIZES[selectedSize];
+  document.getElementById('orderSizeBadge').textContent = `${s.label.toUpperCase()} · ${s.ml}`;
+  document.getElementById('successScreen').classList.add('show');
 }
 
-function closePayment() {
-  document.getElementById('payModal').classList.remove('show');
-}
-
-function formatCard(input) {
-  let v = input.value.replace(/\D/g, '').substring(0, 16);
-  input.value = v.replace(/(.{4})/g, '$1  ').trim();
-}
-
-function formatExpiry(input) {
-  let v = input.value.replace(/\D/g, '');
-  if (v.length >= 3) v = v.substring(0,2) + '/' + v.substring(2,4);
-  input.value = v;
-}
-
-function processPayment() {
-  const name = document.getElementById('cardName').value.trim();
-  const num  = document.getElementById('cardNumber').value.replace(/\s/g, '');
-  const exp  = document.getElementById('cardExp').value.trim();
-  const cvv  = document.getElementById('cardCvv').value.trim();
-
-  if (!name || num.length < 16 || exp.length < 5 || cvv.length < 3) {
-    alert('Please fill in all card details correctly!');
-    return;
-  }
-
-  const payBtn = document.querySelector('.pay-btn');
-  payBtn.innerHTML = '<span class="spinner"></span>Processing...';
-  payBtn.disabled = true;
-
-  setTimeout(() => {
-    payBtn.innerHTML = '🔒 PAY';
-    payBtn.disabled = false;
-    closePayment();
-    const num = String(Math.floor(Math.random() * 90) + 10);
-    document.getElementById('orderNum').textContent = '#' + num;
-    document.getElementById('successScreen').classList.add('show');
-  }, 2000);
-}
-
-/* ─── RESET ─── */
 function resetAll() {
-  cart = {};
-  selectedMood = '';
-  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+  cart={}; selectedMood=''; selectedSize='M';
+  document.querySelectorAll('.mood-btn,.size-card').forEach(b => b.classList.remove('active'));
+  document.getElementById('sz-M').classList.add('active');
   document.getElementById('aiResult').classList.remove('show');
   document.getElementById('successScreen').classList.remove('show');
-  document.getElementById('cardName').value = '';
-  document.getElementById('cardNumber').value = '';
-  document.getElementById('cardExp').value = '';
-  document.getElementById('cardCvv').value = '';
-  renderMenu();
-  updateCart();
+  renderMenu(); updateCart();
 }
 
-renderMenu();
-updateCart();
+renderMenu(); updateCart();
 </script>
 </body>
 </html>
