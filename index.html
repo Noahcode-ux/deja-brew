@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dejai Brew | Artisan Coffee</title>
+<title>Deja Brew | Coffee & Snacks</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -20,40 +20,14 @@
 
 body{
   font-family:'DM Sans',sans-serif;
+  background:radial-gradient(circle at top,#1a0a00,#0d0500);
   color:var(--cream);
-  overflow-x:hidden;
-  background:black;
+  min-height:100vh;
 }
 
-/* 🎥 BACKGROUND ESPRESSO MACHINE LOOP */
-.bg-video{
-  position:fixed;
-  top:0;left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  opacity:0.25;
-  z-index:-2;
-  filter:contrast(1.2) brightness(0.6);
-}
+.container{max-width:900px;margin:auto;padding:24px;}
 
-/* dark overlay */
-.overlay{
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle at top,#1a0a00,#050201);
-  z-index:-1;
-}
-
-/* container */
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:24px;
-}
-
-/* HEADER */
-header{text-align:center;margin-bottom:20px;}
+header{text-align:center;margin-bottom:25px;}
 
 .logo{
   font-family:'Playfair Display',serif;
@@ -62,139 +36,59 @@ header{text-align:center;margin-bottom:20px;}
 }
 .logo span{color:var(--cream);}
 
-/* ☕ STEAM FOLLOW CURSOR */
-#steam{
-  position:fixed;
-  width:12px;
-  height:12px;
-  background:rgba(255,255,255,0.4);
-  border-radius:50%;
-  pointer-events:none;
-  transform:translate(-50%,-50%);
-  filter:blur(2px);
-  z-index:10;
-  animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-  0%,100%{opacity:.3;transform:scale(1)}
-  50%{opacity:.8;transform:scale(1.6)}
-}
-
-/* filters */
-.filters{
+/* TABS */
+.tabs{
   display:flex;
   gap:10px;
   overflow-x:auto;
   margin-bottom:20px;
 }
 
-.filters button{
+.tabs button{
   background:transparent;
   border:1px solid var(--warm);
   color:var(--warm);
-  padding:8px 16px;
+  padding:8px 14px;
   border-radius:20px;
   cursor:pointer;
+  white-space:nowrap;
 }
 
-.filters .active{
+.tabs button.active{
   background:var(--gold);
   color:black;
 }
 
-/* grid */
+/* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px;
 }
 
-/* card */
+/* CARD */
 .card{
   background:var(--glass);
   border:1px solid rgba(255,255,255,0.08);
-  border-radius:18px;
-  padding:18px;
+  border-radius:16px;
+  padding:16px;
   cursor:pointer;
-  position:relative;
-  overflow:hidden;
-  transition:.3s;
+  transition:.25s;
 }
 
 .card:hover{
-  transform:translateY(-6px);
+  transform:translateY(-5px);
+  border-color:var(--gold);
 }
 
-/* 🪄 LIQUID FILL */
-.fill::after{
-  content:"";
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:100%;
-  height:0%;
-  background:linear-gradient(to top, rgba(232,184,75,0.4), transparent);
-  animation:fill 0.6s ease-out;
-}
+.price{color:var(--gold);margin-top:6px;font-weight:700}
 
-@keyframes fill{
-  from{height:0%;}
-  to{height:100%;}
-}
-
-/* 🧋 3D CUP */
-.scene{perspective:900px;}
-
-.cup3d{
-  width:60px;
-  height:70px;
-  margin:auto;
-  transform-style:preserve-3d;
-  animation:float 3s infinite ease-in-out;
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0) rotateY(0)}
-  50%{transform:translateY(-5px) rotateY(180deg)}
-}
-
-.cup{
-  width:40px;
-  height:45px;
-  background:linear-gradient(#3b1f10,#1a0a00);
-  border-radius:10px;
-  position:absolute;
-  bottom:0;
-  left:10px;
-}
-
-.handle{
-  width:18px;
-  height:18px;
-  border:3px solid var(--gold);
-  border-radius:50%;
-  position:absolute;
-  right:-10px;
-  top:18px;
-}
-
-.liquid{
-  width:34px;
-  height:10px;
-  background:var(--gold);
-  position:absolute;
-  bottom:40px;
-  left:13px;
-  border-radius:50%;
-}
-
-/* cart */
+/* CART */
 .cart{
   margin-top:30px;
-  background:rgba(0,0,0,0.4);
+  background:rgba(0,0,0,0.35);
   padding:18px;
-  border-radius:18px;
+  border-radius:16px;
 }
 
 .total{
@@ -220,31 +114,25 @@ header{text-align:center;margin-bottom:20px;}
 
 <body>
 
-<!-- 🎥 ESPRESSO MACHINE VIDEO BACKGROUND -->
-<video class="bg-video" autoplay muted loop>
-  <source src="https://cdn.coverr.co/videos/coverr-coffee-machine-espresso-1720/1080p.mp4" type="video/mp4">
-</video>
-
-<div class="overlay"></div>
-
-<!-- ☕ STEAM CURSOR -->
-<div id="steam"></div>
-
 <div class="container">
 
 <header>
   <div class="logo">Dejai <span>Brew</span></div>
 </header>
 
-<div class="filters">
-  <button class="active">All</button>
-  <button>Coffee</button>
-  <button>Cold</button>
-  <button>Signature</button>
+<!-- 🟡 TABS -->
+<div class="tabs">
+  <button class="active" onclick="setFilter('all', this)">All</button>
+  <button onclick="setFilter('coffee', this)">Coffee</button>
+  <button onclick="setFilter('cold', this)">Cold Brew</button>
+  <button onclick="setFilter('signature', this)">Signature</button>
+  <button onclick="setFilter('snacks', this)">Snacks 🍪</button>
 </div>
 
+<!-- MENU -->
 <div class="grid" id="grid"></div>
 
+<!-- CART -->
 <div class="cart">
   <div id="cart"></div>
   <div class="total" id="total">Total: R0</div>
@@ -255,72 +143,83 @@ header{text-align:center;margin-bottom:20px;}
 
 <script>
 
-const items=[
- {name:"Espresso",price:28},
- {name:"Flat White",price:38},
- {name:"Cappuccino",price:40},
- {name:"Latte",price:45},
- {name:"Iced Americano",price:32},
- {name:"Nitro Brew",price:50}
+/* ☕ + 🍪 FULL MENU DATA */
+const items = [
+  // COFFEE
+  {name:"Espresso", price:28, cat:"coffee"},
+  {name:"Flat White", price:38, cat:"coffee"},
+  {name:"Cappuccino", price:40, cat:"coffee"},
+
+  // COLD
+  {name:"Iced Americano", price:32, cat:"cold"},
+  {name:"Nitro Brew", price:50, cat:"cold"},
+
+  // SIGNATURE
+  {name:"Vanilla Latte", price:45, cat:"signature"},
+  {name:"Caramel Macchiato", price:48, cat:"signature"},
+
+  // 🍪 SNACKS (NEW)
+  {name:"Chocolate Croissant", price:25, cat:"snacks"},
+  {name:"Blueberry Muffin", price:22, cat:"snacks"},
+  {name:"Cinnamon Roll", price:28, cat:"snacks"},
+  {name:"Butter Cookie Box", price:30, cat:"snacks"},
+  {name:"Brownie Bite", price:18, cat:"snacks"}
 ];
 
-let cart=[];
+let cart = [];
 
-/* render menu */
-function render(){
- const g=document.getElementById("grid");
- g.innerHTML="";
+/* 🔥 RENDER MENU */
+function render(filter="all"){
+  const g = document.getElementById("grid");
+  g.innerHTML="";
 
- items.forEach(i=>{
-  const d=document.createElement("div");
-  d.className="card";
+  const filtered = filter==="all"
+    ? items
+    : items.filter(i=>i.cat===filter);
 
-  d.innerHTML=`
-   <div class="scene">
-    <div class="cup3d">
-      <div class="cup"></div>
-      <div class="liquid"></div>
-      <div class="handle"></div>
-    </div>
-   </div>
-   <div style="margin-top:10px">${i.name}</div>
-   <div style="color:var(--gold)">R${i.price}</div>
-  `;
+  filtered.forEach(i=>{
+    const d=document.createElement("div");
+    d.className="card";
 
-  d.onclick=()=>{
+    d.innerHTML=`
+      <div style="font-size:1.4rem">☕🍪</div>
+      <div style="margin-top:10px;font-weight:500">${i.name}</div>
+      <div class="price">R${i.price}</div>
+    `;
 
-    /* 🪄 liquid fill animation */
-    d.classList.add("fill");
-    setTimeout(()=>d.classList.remove("fill"),600);
+    d.onclick=()=>{
+      cart.push(i);
+      update();
+    };
 
-    cart.push(i);
-    update();
-  };
-
-  g.appendChild(d);
- });
+    g.appendChild(d);
+  });
 }
 
-/* cart */
+/* 🟡 FILTER */
+function setFilter(type, btn){
+  document.querySelectorAll(".tabs button")
+    .forEach(b=>b.classList.remove("active"));
+
+  btn.classList.add("active");
+  render(type);
+}
+
+/* 🧾 CART */
 function update(){
- const c=document.getElementById("cart");
- const t=document.getElementById("total");
+  const c=document.getElementById("cart");
+  const t=document.getElementById("total");
 
- c.innerHTML=cart.map(x=>`<div>${x.name} - R${x.price}</div>`).join("");
+  c.innerHTML=cart.map(x=>`
+    <div>${x.name} - R${x.price}</div>
+  `).join("");
 
- let total=cart.reduce((a,b)=>a+b.price,0);
- t.innerText="Total: R"+total;
+  let total = cart.reduce((a,b)=>a+b.price,0);
+  t.innerText="Total: R"+total;
 }
 
+/* INIT */
 render();
-
-/* ☕ steam follows mouse */
-const steam=document.getElementById("steam");
-
-document.addEventListener("mousemove",(e)=>{
- steam.style.left=e.clientX+"px";
- steam.style.top=e.clientY+"px";
-});
 
 </script>
 
