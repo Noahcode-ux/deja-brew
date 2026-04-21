@@ -3,367 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrewMind Kiosk | Artisan Coffee</title>
+<title>Dejai Brew | Artisan Coffee</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --cream: #f5efe6;
-    --espresso: #1a0a00;
-    --caramel: #c07b2a;
-    --gold: #e8b84b;
-    --foam: #fdf6ec;
-    --warm-gray: #8a7968;
-    --accent: #d4521a;
-    --glass: rgba(255, 255, 255, 0.05);
-  }
+:root{
+  --cream:#f6f1e8;
+  --espresso:#120800;
+  --gold:#e8b84b;
+  --glass:rgba(255,255,255,0.06);
+  --warm:#9a8a7a;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--espresso);
-    color: var(--cream);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-x: hidden;
-  }
+body{
+  font-family:'DM Sans',sans-serif;
+  color:var(--cream);
+  overflow-x:hidden;
+  background:black;
+}
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
+/* 🎥 BACKGROUND ESPRESSO MACHINE LOOP */
+.bg-video{
+  position:fixed;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0.25;
+  z-index:-2;
+  filter:contrast(1.2) brightness(0.6);
+}
 
-  .kiosk-container {
-    width: 100%;
-    max-width: 800px;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
-  }
+/* dark overlay */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at top,#1a0a00,#050201);
+  z-index:-1;
+}
 
-  header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding-top: 20px;
-  }
+/* container */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:24px;
+}
 
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    font-weight: 900;
-    color: var(--gold);
-    letter-spacing: -1px;
-  }
+/* HEADER */
+header{text-align:center;margin-bottom:20px;}
 
-  .logo span { color: var(--cream); }
+.logo{
+  font-family:'Playfair Display',serif;
+  font-size:3rem;
+  color:var(--gold);
+}
+.logo span{color:var(--cream);}
 
-  .section-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--gold);
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+/* ☕ STEAM FOLLOW CURSOR */
+#steam{
+  position:fixed;
+  width:12px;
+  height:12px;
+  background:rgba(255,255,255,0.4);
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  filter:blur(2px);
+  z-index:10;
+  animation:pulse 1s infinite;
+}
 
-  /* Menu Styles */
-  .menu-filters {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-  }
+@keyframes pulse{
+  0%,100%{opacity:.3;transform:scale(1)}
+  50%{opacity:.8;transform:scale(1.6)}
+}
 
-  .filter-btn {
-    background: transparent;
-    border: 1px solid var(--warm-gray);
-    color: var(--warm-gray);
-    padding: 6px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: 0.2s;
-  }
+/* filters */
+.filters{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  margin-bottom:20px;
+}
 
-  .filter-btn.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--espresso);
-  }
+.filters button{
+  background:transparent;
+  border:1px solid var(--warm);
+  color:var(--warm);
+  padding:8px 16px;
+  border-radius:20px;
+  cursor:pointer;
+}
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 16px;
-  }
+.filters .active{
+  background:var(--gold);
+  color:black;
+}
 
-  .item-card {
-    background: var(--glass);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 18px;
-    padding: 20px;
-    transition: 0.3s;
-    cursor: pointer;
-  }
+/* grid */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+  gap:16px;
+}
 
-  .item-card:hover {
-    background: rgba(255,255,255,0.08);
-    border-color: var(--caramel);
-    transform: translateY(-3px);
-  }
+/* card */
+.card{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:18px;
+  padding:18px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:.3s;
+}
 
-  .price { color: var(--gold); font-weight: 700; margin-top: 10px; }
+.card:hover{
+  transform:translateY(-6px);
+}
 
-  /* Size Selection Modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(8px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-  }
+/* 🪄 LIQUID FILL */
+.fill::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:0%;
+  background:linear-gradient(to top, rgba(232,184,75,0.4), transparent);
+  animation:fill 0.6s ease-out;
+}
 
-  .modal {
-    background: var(--espresso);
-    border: 1px solid var(--gold);
-    border-radius: 24px;
-    padding: 30px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-  }
+@keyframes fill{
+  from{height:0%;}
+  to{height:100%;}
+}
 
-  .size-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin: 20px 0;
-  }
+/* 🧋 3D CUP */
+.scene{perspective:900px;}
 
-  .size-btn {
-    background: var(--glass);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--cream);
-    padding: 15px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    justify-content: space-between;
-    transition: 0.2s;
-  }
+.cup3d{
+  width:60px;
+  height:70px;
+  margin:auto;
+  transform-style:preserve-3d;
+  animation:float 3s infinite ease-in-out;
+}
 
-  .size-btn:hover {
-    background: var(--caramel);
-    border-color: var(--gold);
-  }
+@keyframes float{
+  0%,100%{transform:translateY(0) rotateY(0)}
+  50%{transform:translateY(-5px) rotateY(180deg)}
+}
 
-  /* Cart Panel */
-  .cart-container {
-    margin-top: 40px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 24px;
-    padding: 24px;
-  }
+.cup{
+  width:40px;
+  height:45px;
+  background:linear-gradient(#3b1f10,#1a0a00);
+  border-radius:10px;
+  position:absolute;
+  bottom:0;
+  left:10px;
+}
 
-  .order-btn {
-    width: 100%;
-    padding: 18px;
-    background: var(--gold);
-    color: var(--espresso);
-    border: none;
-    border-radius: 14px;
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-top: 20px;
-  }
+.handle{
+  width:18px;
+  height:18px;
+  border:3px solid var(--gold);
+  border-radius:50%;
+  position:absolute;
+  right:-10px;
+  top:18px;
+}
 
-  .order-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.liquid{
+  width:34px;
+  height:10px;
+  background:var(--gold);
+  position:absolute;
+  bottom:40px;
+  left:13px;
+  border-radius:50%;
+}
 
-  /* Success Overlay */
-  .success-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--espresso);
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 3000;
-  }
+/* cart */
+.cart{
+  margin-top:30px;
+  background:rgba(0,0,0,0.4);
+  padding:18px;
+  border-radius:18px;
+}
+
+.total{
+  text-align:right;
+  margin-top:10px;
+  color:var(--gold);
+  font-size:1.2rem;
+}
+
+.order{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:none;
+  background:var(--gold);
+  color:black;
+  font-weight:bold;
+  border-radius:10px;
+  cursor:pointer;
+}
 </style>
 </head>
+
 <body>
 
-<div class="kiosk-container">
-  <header>
-    <div class="logo">Brew<span>Mind</span></div>
-    <p style="color: var(--warm-gray); letter-spacing: 2px;">CHOOSE YOUR SIZE & BLEND</p>
-  </header>
+<!-- 🎥 ESPRESSO MACHINE VIDEO BACKGROUND -->
+<video class="bg-video" autoplay muted loop>
+  <source src="https://cdn.coverr.co/videos/coverr-coffee-machine-espresso-1720/1080p.mp4" type="video/mp4">
+</video>
 
-  <div class="menu-filters">
-    <button class="filter-btn active" onclick="filterMenu('all', this)">All</button>
-    <button class="filter-btn" onclick="filterMenu('coffee', this)">Coffee</button>
-    <button class="filter-btn" onclick="filterMenu('cold', this)">Cold Brew</button>
-    <button class="filter-btn" onclick="filterMenu('special', this)">Signatures</button>
-  </div>
+<div class="overlay"></div>
 
-  <div class="grid" id="menuGrid"></div>
+<!-- ☕ STEAM CURSOR -->
+<div id="steam"></div>
 
-  <div class="cart-container">
-    <div class="section-label">Current Order</div>
-    <div id="cartList"></div>
-    <div id="totalDisplay" style="text-align:right; font-size:1.4rem; font-family:'Playfair Display'; margin-top:15px; display:none">
-      Total: <span id="totalValue" style="color:var(--gold)">R0.00</span>
-    </div>
-    <button class="order-btn" id="mainOrderBtn" disabled onclick="checkout()">Confirm Order</button>
-  </div>
+<div class="container">
+
+<header>
+  <div class="logo">Dejai <span>Brew</span></div>
+</header>
+
+<div class="filters">
+  <button class="active">All</button>
+  <button>Coffee</button>
+  <button>Cold</button>
+  <button>Signature</button>
 </div>
 
-<div class="modal-overlay" id="sizeModal">
-  <div class="modal">
-    <h2 id="modalDrinkName" style="font-family:'Playfair Display'; margin-bottom: 5px;">Drink Name</h2>
-    <p style="color: var(--warm-gray); font-size: 0.9rem; margin-bottom: 20px;">Select your preferred size</p>
-    <div class="size-options">
-      <button class="size-btn" onclick="confirmSize('Small', 0)">
-        <span>Small (250ml)</span> <span>+R0</span>
-      </button>
-      <button class="size-btn" onclick="confirmSize('Medium', 5)">
-        <span>Medium (350ml)</span> <span>+R5</span>
-      </button>
-      <button class="size-btn" onclick="confirmSize('Large', 10)">
-        <span>Large (450ml)</span> <span>+R10</span>
-      </button>
-    </div>
-    <button onclick="closeModal()" style="background:none; border:none; color:var(--warm-gray); cursor:pointer;">Cancel</button>
-  </div>
+<div class="grid" id="grid"></div>
+
+<div class="cart">
+  <div id="cart"></div>
+  <div class="total" id="total">Total: R0</div>
+  <button class="order">Confirm Order</button>
 </div>
 
-<div class="success-overlay" id="successScreen">
-  <div style="font-size: 4rem;">☕</div>
-  <h1 style="font-family:'Playfair Display'; font-size: 3rem; color: var(--gold);">Perfect!</h1>
-  <p id="orderRef" style="font-size: 1.5rem; margin: 20px 0;"></p>
-  <button class="filter-btn active" style="padding: 10px 40px" onclick="location.reload()">New Order</button>
 </div>
 
 <script>
-const DATA = [
-  { id: 1, name: 'Double Espresso', price: 28, cat: 'coffee', icon: '☕' },
-  { id: 2, name: 'Flat White', price: 38, cat: 'coffee', icon: '🥛' },
-  { id: 3, name: 'Iced Americano', price: 32, cat: 'cold', icon: '🧊' },
-  { id: 4, name: 'Nitro Cold Brew', price: 45, cat: 'cold', icon: '⚡' },
-  { id: 5, name: 'Honey Lavender Latte', price: 52, cat: 'special', icon: '🍯' },
-  { id: 6, name: 'The Midnight Mocha', price: 55, cat: 'special', icon: '🌙' }
+
+const items=[
+ {name:"Espresso",price:28},
+ {name:"Flat White",price:38},
+ {name:"Cappuccino",price:40},
+ {name:"Latte",price:45},
+ {name:"Iced Americano",price:32},
+ {name:"Nitro Brew",price:50}
 ];
 
-let cart = [];
-let pendingItem = null;
+let cart=[];
 
-function renderMenu(filter = 'all') {
-  const grid = document.getElementById('menuGrid');
-  grid.innerHTML = '';
-  const items = filter === 'all' ? DATA : DATA.filter(i => i.cat === filter);
-  
-  items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'item-card';
-    card.onclick = () => openSizeModal(item);
-    card.innerHTML = `
-      <div style="font-size: 1.8rem">${item.icon}</div>
-      <div style="font-weight:500; margin-top:10px">${item.name}</div>
-      <div class="price">From R${item.price}.00</div>
-    `;
-    grid.appendChild(card);
-  });
-}
+/* render menu */
+function render(){
+ const g=document.getElementById("grid");
+ g.innerHTML="";
 
-function openSizeModal(item) {
-  pendingItem = item;
-  document.getElementById('modalDrinkName').innerText = item.name;
-  document.getElementById('sizeModal').style.display = 'flex';
-}
+ items.forEach(i=>{
+  const d=document.createElement("div");
+  d.className="card";
 
-function closeModal() {
-  document.getElementById('sizeModal').style.display = 'none';
-  pendingItem = null;
-}
-
-function confirmSize(sizeLabel, upcharge) {
-  const finalItem = {
-    ...pendingItem,
-    size: sizeLabel,
-    finalPrice: pendingItem.price + upcharge,
-    uniqueId: Date.now()
-  };
-  cart.push(finalItem);
-  updateCart();
-  closeModal();
-}
-
-function filterMenu(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderMenu(cat);
-}
-
-function updateCart() {
-  const list = document.getElementById('cartList');
-  const totalDisplay = document.getElementById('totalDisplay');
-  const orderBtn = document.getElementById('mainOrderBtn');
-  
-  if(cart.length === 0) {
-    list.innerHTML = '<p style="color:var(--warm-gray)">Your cup is empty...</p>';
-    totalDisplay.style.display = 'none';
-    orderBtn.disabled = true;
-    return;
-  }
-
-  list.innerHTML = cart.map((item, idx) => `
-    <div style="display:flex; justify-content:space-between; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05)">
-      <div>
-        <div style="font-weight:500">${item.name}</div>
-        <div style="font-size:0.75rem; color:var(--gold)">Size: ${item.size}</div>
-      </div>
-      <div style="display:flex; align-items:center">
-        <span>R${item.finalPrice}.00</span>
-        <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--accent); cursor:pointer; margin-left:12px; font-size:1.1rem">✕</button>
-      </div>
+  d.innerHTML=`
+   <div class="scene">
+    <div class="cup3d">
+      <div class="cup"></div>
+      <div class="liquid"></div>
+      <div class="handle"></div>
     </div>
-  `).join('');
+   </div>
+   <div style="margin-top:10px">${i.name}</div>
+   <div style="color:var(--gold)">R${i.price}</div>
+  `;
 
-  const total = cart.reduce((sum, item) => sum + item.finalPrice, 0);
-  document.getElementById('totalValue').innerText = `R${total}.00`;
-  totalDisplay.style.display = 'block';
-  orderBtn.disabled = false;
+  d.onclick=()=>{
+
+    /* 🪄 liquid fill animation */
+    d.classList.add("fill");
+    setTimeout(()=>d.classList.remove("fill"),600);
+
+    cart.push(i);
+    update();
+  };
+
+  g.appendChild(d);
+ });
 }
 
-function removeItem(idx) {
-  cart.splice(idx, 1);
-  updateCart();
+/* cart */
+function update(){
+ const c=document.getElementById("cart");
+ const t=document.getElementById("total");
+
+ c.innerHTML=cart.map(x=>`<div>${x.name} - R${x.price}</div>`).join("");
+
+ let total=cart.reduce((a,b)=>a+b.price,0);
+ t.innerText="Total: R"+total;
 }
 
-function checkout() {
-  const ref = Math.floor(Math.random() * 900) + 100;
-  document.getElementById('orderRef').innerText = `Your Number: #${ref}`;
-  document.getElementById('successScreen').style.display = 'flex';
-}
+render();
 
-renderMenu();
+/* ☕ steam follows mouse */
+const steam=document.getElementById("steam");
+
+document.addEventListener("mousemove",(e)=>{
+ steam.style.left=e.clientX+"px";
+ steam.style.top=e.clientY+"px";
+});
+
 </script>
+
 </body>
 </html>
