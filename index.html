@@ -64,16 +64,6 @@
 
   .logo span { color: var(--cream); }
 
-  /* AI Section */
-  .ai-section {
-    background: linear-gradient(145deg, rgba(192,123,42,0.1), rgba(232,184,75,0.05));
-    border: 1px solid rgba(232,184,75,0.2);
-    border-radius: 24px;
-    padding: 24px;
-    margin-bottom: 40px;
-    backdrop-filter: blur(10px);
-  }
-
   .section-label {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -83,30 +73,6 @@
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-
-  .mood-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
-  .mood-btn {
-    background: var(--glass);
-    border: 1px solid rgba(255,255,255,0.1);
-    color: var(--cream);
-    padding: 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-size: 0.85rem;
-  }
-
-  .mood-btn:hover, .mood-btn.active {
-    background: var(--caramel);
-    border-color: var(--gold);
-    transform: translateY(-2px);
   }
 
   /* Menu Styles */
@@ -126,6 +92,7 @@
     border-radius: 20px;
     cursor: pointer;
     white-space: nowrap;
+    transition: 0.2s;
   }
 
   .filter-btn.active {
@@ -147,17 +114,62 @@
     padding: 20px;
     transition: 0.3s;
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
 
   .item-card:hover {
     background: rgba(255,255,255,0.08);
     border-color: var(--caramel);
+    transform: translateY(-3px);
   }
 
   .price { color: var(--gold); font-weight: 700; margin-top: 10px; }
+
+  /* Size Selection Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+  }
+
+  .modal {
+    background: var(--espresso);
+    border: 1px solid var(--gold);
+    border-radius: 24px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .size-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .size-btn {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--cream);
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.2s;
+  }
+
+  .size-btn:hover {
+    background: var(--caramel);
+    border-color: var(--gold);
+  }
 
   /* Cart Panel */
   .cart-container {
@@ -184,7 +196,7 @@
   .order-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
   /* Success Overlay */
-  .overlay {
+  .success-overlay {
     position: fixed;
     inset: 0;
     background: var(--espresso);
@@ -192,10 +204,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 3000;
   }
-
-  .overlay.active { display: flex; }
 </style>
 </head>
 <body>
@@ -203,23 +213,9 @@
 <div class="kiosk-container">
   <header>
     <div class="logo">Brew<span>Mind</span></div>
-    <p style="color: var(--warm-gray); letter-spacing: 2px;">PREMIUM COFFEE EXPERIENCE</p>
+    <p style="color: var(--warm-gray); letter-spacing: 2px;">CHOOSE YOUR SIZE & BLEND</p>
   </header>
 
-  <div class="ai-section">
-    <div class="section-label">✨ Smart Recommender</div>
-    <h3 style="margin-bottom:15px; font-family:'Playfair Display'">How is your energy?</h3>
-    <div class="mood-options" id="moodGrid">
-      <button class="mood-btn" onclick="setMood(this, 'tired')">😴 Tired</button>
-      <button class="mood-btn" onclick="setMood(this, 'focused')">📚 Focused</button>
-      <button class="mood-btn" onclick="setMood(this, 'chill')">🌿 Relaxed</button>
-      <button class="mood-btn" onclick="setMood(this, 'cold')">❄️ Chilled</button>
-    </div>
-    <button class="order-btn" style="font-size: 1rem; margin-top:0" onclick="getAiAdvice()">Ask AI Barista</button>
-    <div id="aiResponse" style="margin-top:20px; color: var(--gold); display:none; padding:15px; background: rgba(0,0,0,0.2); border-radius:10px;"></div>
-  </div>
-
-  <div class="section-label">Menu</div>
   <div class="menu-filters">
     <button class="filter-btn active" onclick="filterMenu('all', this)">All</button>
     <button class="filter-btn" onclick="filterMenu('coffee', this)">Coffee</button>
@@ -230,7 +226,7 @@
   <div class="grid" id="menuGrid"></div>
 
   <div class="cart-container">
-    <div class="section-label">Your Selection</div>
+    <div class="section-label">Current Order</div>
     <div id="cartList"></div>
     <div id="totalDisplay" style="text-align:right; font-size:1.4rem; font-family:'Playfair Display'; margin-top:15px; display:none">
       Total: <span id="totalValue" style="color:var(--gold)">R0.00</span>
@@ -239,8 +235,28 @@
   </div>
 </div>
 
-<div class="overlay" id="successScreen">
-  <h1 style="font-family:'Playfair Display'; font-size: 3rem; color: var(--gold);">Enjoy!</h1>
+<div class="modal-overlay" id="sizeModal">
+  <div class="modal">
+    <h2 id="modalDrinkName" style="font-family:'Playfair Display'; margin-bottom: 5px;">Drink Name</h2>
+    <p style="color: var(--warm-gray); font-size: 0.9rem; margin-bottom: 20px;">Select your preferred size</p>
+    <div class="size-options">
+      <button class="size-btn" onclick="confirmSize('Small', 0)">
+        <span>Small (250ml)</span> <span>+R0</span>
+      </button>
+      <button class="size-btn" onclick="confirmSize('Medium', 5)">
+        <span>Medium (350ml)</span> <span>+R5</span>
+      </button>
+      <button class="size-btn" onclick="confirmSize('Large', 10)">
+        <span>Large (450ml)</span> <span>+R10</span>
+      </button>
+    </div>
+    <button onclick="closeModal()" style="background:none; border:none; color:var(--warm-gray); cursor:pointer;">Cancel</button>
+  </div>
+</div>
+
+<div class="success-overlay" id="successScreen">
+  <div style="font-size: 4rem;">☕</div>
+  <h1 style="font-family:'Playfair Display'; font-size: 3rem; color: var(--gold);">Perfect!</h1>
   <p id="orderRef" style="font-size: 1.5rem; margin: 20px 0;"></p>
   <button class="filter-btn active" style="padding: 10px 40px" onclick="location.reload()">New Order</button>
 </div>
@@ -256,25 +272,47 @@ const DATA = [
 ];
 
 let cart = [];
-let selectedMood = null;
+let pendingItem = null;
 
 function renderMenu(filter = 'all') {
   const grid = document.getElementById('menuGrid');
   grid.innerHTML = '';
-  
   const items = filter === 'all' ? DATA : DATA.filter(i => i.cat === filter);
   
   items.forEach(item => {
     const card = document.createElement('div');
     card.className = 'item-card';
-    card.onclick = () => addToCart(item);
+    card.onclick = () => openSizeModal(item);
     card.innerHTML = `
       <div style="font-size: 1.8rem">${item.icon}</div>
       <div style="font-weight:500; margin-top:10px">${item.name}</div>
-      <div class="price">R${item.price}.00</div>
+      <div class="price">From R${item.price}.00</div>
     `;
     grid.appendChild(card);
   });
+}
+
+function openSizeModal(item) {
+  pendingItem = item;
+  document.getElementById('modalDrinkName').innerText = item.name;
+  document.getElementById('sizeModal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('sizeModal').style.display = 'none';
+  pendingItem = null;
+}
+
+function confirmSize(sizeLabel, upcharge) {
+  const finalItem = {
+    ...pendingItem,
+    size: sizeLabel,
+    finalPrice: pendingItem.price + upcharge,
+    uniqueId: Date.now()
+  };
+  cart.push(finalItem);
+  updateCart();
+  closeModal();
 }
 
 function filterMenu(cat, btn) {
@@ -283,31 +321,32 @@ function filterMenu(cat, btn) {
   renderMenu(cat);
 }
 
-function addToCart(item) {
-  cart.push(item);
-  updateCart();
-}
-
 function updateCart() {
   const list = document.getElementById('cartList');
   const totalDisplay = document.getElementById('totalDisplay');
   const orderBtn = document.getElementById('mainOrderBtn');
   
   if(cart.length === 0) {
-    list.innerHTML = '<p style="color:var(--warm-gray)">No items selected</p>';
+    list.innerHTML = '<p style="color:var(--warm-gray)">Your cup is empty...</p>';
     totalDisplay.style.display = 'none';
     orderBtn.disabled = true;
     return;
   }
 
   list.innerHTML = cart.map((item, idx) => `
-    <div style="display:flex; justify-content:space-between; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05)">
-      <span>${item.name}</span>
-      <span>R${item.price}.00 <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--accent); cursor:pointer; margin-left:10px">✕</button></span>
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05)">
+      <div>
+        <div style="font-weight:500">${item.name}</div>
+        <div style="font-size:0.75rem; color:var(--gold)">Size: ${item.size}</div>
+      </div>
+      <div style="display:flex; align-items:center">
+        <span>R${item.finalPrice}.00</span>
+        <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--accent); cursor:pointer; margin-left:12px; font-size:1.1rem">✕</button>
+      </div>
     </div>
   `).join('');
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const total = cart.reduce((sum, item) => sum + item.finalPrice, 0);
   document.getElementById('totalValue').innerText = `R${total}.00`;
   totalDisplay.style.display = 'block';
   orderBtn.disabled = false;
@@ -318,45 +357,12 @@ function removeItem(idx) {
   updateCart();
 }
 
-function setMood(btn, mood) {
-  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedMood = mood;
-}
-
-function getAiAdvice() {
-  const box = document.getElementById('aiResponse');
-  if(!selectedMood) {
-    alert("Select a mood first!");
-    return;
-  }
-  
-  box.style.display = 'block';
-  box.innerHTML = "⌛ AI Barista is thinking...";
-  
-  // Simulated AI Logic
-  setTimeout(() => {
-    let rec = DATA[0];
-    if(selectedMood === 'tired') rec = DATA[3]; // Nitro
-    if(selectedMood === 'chill') rec = DATA[1]; // Flat White
-    if(selectedMood === 'cold') rec = DATA[2];  // Iced
-    
-    box.innerHTML = `<strong>Recommendation:</strong> ${rec.name}. A perfect match for your ${selectedMood} mood. <button onclick='addToCartById(${rec.id})' style="background:var(--gold); border:none; padding:4px 8px; border-radius:4px; cursor:pointer; margin-left:10px">Add to Order</button>`;
-  }, 800);
-}
-
-function addToCartById(id) {
-  const item = DATA.find(i => i.id === id);
-  addToCart(item);
-}
-
 function checkout() {
   const ref = Math.floor(Math.random() * 900) + 100;
-  document.getElementById('orderRef').innerText = `Order #${ref}`;
-  document.getElementById('successScreen').classList.add('active');
+  document.getElementById('orderRef').innerText = `Your Number: #${ref}`;
+  document.getElementById('successScreen').style.display = 'flex';
 }
 
-// Initialize
 renderMenu();
 </script>
 </body>
