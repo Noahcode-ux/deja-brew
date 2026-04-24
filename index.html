@@ -117,7 +117,7 @@ header{text-align:center;margin-bottom:25px;}
 <div class="container">
 
 <header>
-  <div class="logo">Dejai <span>Brew</span></div>
+  <div class="logo">Deja <span>Brew</span></div>
 </header>
 
 <!-- 🟡 TABS -->
@@ -136,7 +136,7 @@ header{text-align:center;margin-bottom:25px;}
 <div class="cart">
   <div id="cart"></div>
   <div class="total" id="total">Total: R0</div>
-  <button class="order">Confirm Order</button>
+  <button class="order" onclick="confirmOrder()">Confirm Order</button>
 </div>
 
 </div>
@@ -145,20 +145,16 @@ header{text-align:center;margin-bottom:25px;}
 
 /* ☕ + 🍪 FULL MENU DATA */
 const items = [
-  // COFFEE
   {name:"Espresso", price:28, cat:"coffee"},
   {name:"Flat White", price:38, cat:"coffee"},
   {name:"Cappuccino", price:40, cat:"coffee"},
 
-  // COLD
   {name:"Iced Americano", price:32, cat:"cold"},
   {name:"Nitro Brew", price:50, cat:"cold"},
 
-  // SIGNATURE
   {name:"Vanilla Latte", price:45, cat:"signature"},
   {name:"Caramel Macchiato", price:48, cat:"signature"},
 
-  // 🍪 SNACKS (NEW)
   {name:"Chocolate Croissant", price:25, cat:"snacks"},
   {name:"Blueberry Muffin", price:22, cat:"snacks"},
   {name:"Cinnamon Roll", price:28, cat:"snacks"},
@@ -216,6 +212,19 @@ function update(){
 
   let total = cart.reduce((a,b)=>a+b.price,0);
   t.innerText="Total: R"+total;
+}
+
+/* ✅ CONFIRM ORDER */
+function confirmOrder(){
+  if(cart.length === 0){
+    alert("Your cart is empty.");
+    return;
+  }
+
+  alert("Order confirmed! ☕");
+
+  cart = [];
+  update();
 }
 
 /* INIT */
