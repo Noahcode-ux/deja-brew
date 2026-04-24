@@ -60,6 +60,7 @@ export default function Home() {
           font-family: 'Playfair Display', serif;
           font-size: 3rem;
           color: #e8b84b;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         .logo span {
           color: #f6f1e8;
@@ -69,75 +70,107 @@ export default function Home() {
           gap: 10px;
           overflow-x: auto;
           margin-bottom: 20px;
+          justify-content: center;
+          flex-wrap: wrap;
         }
         .tabs button {
           background: transparent;
           border: 1px solid #9a8a7a;
           color: #9a8a7a;
-          padding: 8px 14px;
-          border-radius: 20px;
+          padding: 10px 16px;
+          border-radius: 25px;
           cursor: pointer;
           white-space: nowrap;
+          transition: all 0.3s ease;
+          font-weight: 500;
+        }
+        .tabs button:hover {
+          border-color: #e8b84b;
+          color: #e8b84b;
+          transform: translateY(-2px);
         }
         .tabs button.active {
-          background: #e8b84b;
+          background: linear-gradient(45deg, #e8b84b, #d4a43c);
           color: black;
+          box-shadow: 0 4px 8px rgba(232, 184, 75, 0.3);
         }
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-          gap: 14px;
+          grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+          gap: 20px;
         }
         .card {
-          background: rgba(255, 255, 255, 0.06);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 16px;
-          padding: 16px;
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 20px;
           cursor: pointer;
-          transition: 0.25s;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          text-align: center;
         }
         .card:hover {
-          transform: translateY(-5px);
+          transform: translateY(-8px) scale(1.05);
           border-color: #e8b84b;
+          box-shadow: 0 8px 20px rgba(232, 184, 75, 0.4);
         }
         .price {
           color: #e8b84b;
-          margin-top: 6px;
+          margin-top: 8px;
           font-weight: 700;
+          font-size: 1.1rem;
         }
         .cart {
-          margin-top: 30px;
-          background: rgba(0, 0, 0, 0.35);
-          padding: 18px;
-          border-radius: 16px;
+          margin-top: 40px;
+          background: rgba(0, 0, 0, 0.4);
+          padding: 24px;
+          border-radius: 20px;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+        }
+        .cart-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 8px 0;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .cart-item:last-child {
+          border-bottom: none;
         }
         .total {
           text-align: right;
-          margin-top: 10px;
+          margin-top: 15px;
           color: #e8b84b;
-          font-size: 1.2rem;
+          font-size: 1.3rem;
+          font-weight: bold;
         }
         .order {
           width: 100%;
-          margin-top: 12px;
-          padding: 14px;
+          margin-top: 15px;
+          padding: 16px;
           border: none;
-          background: #e8b84b;
+          background: linear-gradient(45deg, #e8b84b, #d4a43c);
           color: black;
           font-weight: bold;
-          border-radius: 10px;
+          border-radius: 12px;
           cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 1.1rem;
+        }
+        .order:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(232, 184, 75, 0.4);
         }
       `}</style>
       <header>
         <div className="logo">Deja <span>Brew</span></div>
       </header>
       <div className="tabs">
-        <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>All</button>
-        <button className={filter === 'coffee' ? 'active' : ''} onClick={() => setFilter('coffee')}>Coffee</button>
-        <button className={filter === 'cold' ? 'active' : ''} onClick={() => setFilter('cold')}>Cold Brew</button>
-        <button className={filter === 'signature' ? 'active' : ''} onClick={() => setFilter('signature')}>Signature</button>
-        <button className={filter === 'snacks' ? 'active' : ''} onClick={() => setFilter('snacks')}>Snacks 🍪</button>
+        <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>🍽️ All</button>
+        <button className={filter === 'coffee' ? 'active' : ''} onClick={() => setFilter('coffee')}>☕ Coffee</button>
+        <button className={filter === 'cold' ? 'active' : ''} onClick={() => setFilter('cold')}>🧊 Cold Brew</button>
+        <button className={filter === 'signature' ? 'active' : ''} onClick={() => setFilter('signature')}>⭐ Signature</button>
+        <button className={filter === 'snacks' ? 'active' : ''} onClick={() => setFilter('snacks')}>🍪 Snacks</button>
       </div>
       <div className="grid">
         {filteredItems.map((item, index) => (
@@ -149,11 +182,16 @@ export default function Home() {
         ))}
       </div>
       <div className="cart">
-        <div>
-          {cart.map((item, index) => (
-            <div key={index}>{item.name} - R{item.price}</div>
-          ))}
-        </div>
+        {cart.length > 0 ? (
+          cart.map((item, index) => (
+            <div key={index} className="cart-item">
+              <span>{item.name}</span>
+              <span>R{item.price}</span>
+            </div>
+          ))
+        ) : (
+          <div style={{ textAlign: 'center', color: '#9a8a7a' }}>Your cart is empty</div>
+        )}
         <div className="total">Total: R{total}</div>
         <button className="order" onClick={confirmOrder}>Confirm Order</button>
       </div>
