@@ -27,7 +27,18 @@ body{
 
 .container{max-width:900px;margin:auto;padding:24px;}
 
-header{text-align:center;margin-bottom:25px;}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
 
 .logo{
   font-family:'Playfair Display',serif;
@@ -36,12 +47,37 @@ header{text-align:center;margin-bottom:25px;}
 }
 .logo span{color:var(--cream);}
 
+.menu-btn{
+  background:var(--gold);
+  border:none;
+  color:black;
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.menu-btn:hover{
+  opacity:0.8;
+}
+
 /* TABS */
 .tabs{
-  display:flex;
+  display:none;
   gap:10px;
   overflow-x:auto;
   margin-bottom:20px;
+  flex-direction:column;
+}
+
+.tabs.active{
+  display:flex;
+  flex-direction:row;
 }
 
 .tabs button{
@@ -109,6 +145,78 @@ header{text-align:center;margin-bottom:25px;}
   border-radius:10px;
   cursor:pointer;
 }
+
+/* ABOUT SECTION */
+.about-section{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  padding:32px;
+  margin-bottom:30px;
+  text-align:center;
+}
+
+.about-section h1{
+  font-family:'Playfair Display',serif;
+  font-size:2rem;
+  color:var(--gold);
+  margin-bottom:16px;
+}
+
+.about-section p{
+  font-size:1rem;
+  line-height:1.6;
+  color:var(--cream);
+  margin-bottom:12px;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  margin-top:24px;
+}
+
+.feature{
+  background:rgba(0,0,0,0.3);
+  padding:16px;
+  border-radius:12px;
+  border:1px solid rgba(232,184,75,0.2);
+}
+
+.feature h3{
+  color:var(--gold);
+  margin-bottom:8px;
+}
+
+.feature p{
+  font-size:0.9rem;
+  color:var(--warm);
+}
+
+.menu-toggle-btn{
+  background:var(--gold);
+  border:none;
+  color:black;
+  padding:12px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:1rem;
+  margin-bottom:20px;
+}
+
+.menu-toggle-btn:hover{
+  opacity:0.8;
+}
+
+.content-section{
+  display:none;
+}
+
+.content-section.active{
+  display:block;
+}
 </style>
 </head>
 
@@ -117,26 +225,57 @@ header{text-align:center;margin-bottom:25px;}
 <div class="container">
 
 <header>
-  <div class="logo">Deja <span>Brew</span></div>
+  <div class="header-left">
+    <div class="logo">Deja <span>Brew</span></div>
+  </div>
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
 </header>
 
-<!-- 🟡 TABS -->
-<div class="tabs">
-  <button class="active" onclick="setFilter('all', this)">All</button>
-  <button onclick="setFilter('coffee', this)">Coffee</button>
-  <button onclick="setFilter('cold', this)">Cold Brew</button>
-  <button onclick="setFilter('signature', this)">Signature</button>
-  <button onclick="setFilter('snacks', this)">Snacks 🍪</button>
+<!-- ABOUT US SECTION -->
+<div class="about-section">
+  <h1>About Deja Brew</h1>
+  <p>Welcome to Deja Brew, your sanctuary for exceptional coffee and artisanal snacks. We craft every cup with care and passion.</p>
+  <p style="font-style:italic;color:var(--gold);">☕ Premium Coffee • 🍪 Homemade Snacks • 💚 Community First</p>
+
+  <div class="features">
+    <div class="feature">
+      <h3>✨ Specialty Coffee</h3>
+      <p>Hand-roasted beans sourced from sustainable farms around the world, crafted to perfection.</p>
+    </div>
+    <div class="feature">
+      <h3>🥐 Artisanal Snacks</h3>
+      <p>Fresh baked goods made daily with premium ingredients and love.</p>
+    </div>
+    <div class="feature">
+      <h3>🏘️ Community Hub</h3>
+      <p>A welcoming space where friends gather, ideas flow, and memories are made.</p>
+    </div>
+  </div>
 </div>
 
-<!-- MENU -->
-<div class="grid" id="grid"></div>
+<!-- MENU TOGGLE -->
+<button class="menu-toggle-btn" onclick="toggleMenu()">📋 View Our Menu</button>
 
-<!-- CART -->
-<div class="cart">
-  <div id="cart"></div>
-  <div class="total" id="total">Total: R0</div>
-  <button class="order" onclick="confirmOrder()">Confirm Order</button>
+<!-- MENU SECTION -->
+<div class="content-section" id="menuSection">
+  <!-- TABS -->
+  <div class="tabs" id="tabs">
+    <button class="active" onclick="setFilter('all', this)">All</button>
+    <button onclick="setFilter('coffee', this)">Coffee</button>
+    <button onclick="setFilter('cold', this)">Cold Brew</button>
+    <button onclick="setFilter('signature', this)">Signature</button>
+    <button onclick="setFilter('snacks', this)">Snacks 🍪</button>
+  </div>
+
+  <!-- MENU -->
+  <div class="grid" id="grid"></div>
+
+  <!-- CART -->
+  <div class="cart">
+    <div id="cart"></div>
+    <div class="total" id="total">Total: R0</div>
+    <button class="order" onclick="confirmOrder()">Confirm Order</button>
+  </div>
 </div>
 
 </div>
@@ -229,6 +368,15 @@ function confirmOrder(){
 
 /* INIT */
 render();
+
+/* 📋 TOGGLE MENU */
+function toggleMenu(){
+  const menuSection = document.getElementById("menuSection");
+  const tabs = document.getElementById("tabs");
+
+  menuSection.classList.toggle("active");
+  tabs.classList.toggle("active");
+}
 
 </script>
 
